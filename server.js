@@ -36,7 +36,7 @@ var App = function(){
   //returns all the parks in the collection
   self.routes['returnAllParks'] = function(req, res){
     self.db.collection('parkpoints').find().toArray(function(err, names) {
-      res.header("Content-Type:","application/json");
+      res.header("Content-Type","application/json");
       res.end(JSON.stringify(names));
     });
   };
@@ -46,7 +46,7 @@ var App = function(){
       var BSON = mongodb.BSONPure;
       var parkObjectID = new BSON.ObjectID(req.params.id);
       self.db.collection('parkpoints').find({'_id':parkObjectID}).toArray(function(err, names){
-        res.header("Content-Type:","application/json"); 
+        res.header("Content-Type","application/json"); 
         res.end(JSON.stringify(names));
       });
   }
@@ -57,7 +57,7 @@ var App = function(){
     var lat = parseFloat(req.query.lat);
     var lon = parseFloat(req.query.lon);
     self.db.collection('parkpoints').find( {"pos" : {$near: [lon,lat]}}).toArray(function(err,names){
-      res.header("Content-Type:","application/json");
+      res.header("Content-Type","application/json");
       res.end(JSON.stringify(names));
     });
   };
@@ -69,7 +69,7 @@ var App = function(){
     var lon = parseFloat(req.query.lon);
     var name = req.params.name;
     self.db.collection('parkpoints').find( {"Name" : {$regex : name, $options : 'i'}, "pos" : { $near : [lon,lat]}}).toArray(function(err,names){
-      res.header("Content-Type:","application/json");
+      res.header("Content-Type","application/json");
       res.end(JSON.stringify(names));
     });
   };
@@ -96,7 +96,7 @@ var App = function(){
   // parse application/x-www-form-urlencoded
   self.app.use(bodyParser.urlencoded());
   // parse application/json
-  self.app.use(bodyParser.json());
+  self.app.use(bodyParser.json({ extended: true }));
   // override with POST having ?_method=DELETE
   self.app.use(methodOverride('_method'))
 
